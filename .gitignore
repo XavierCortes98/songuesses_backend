@@ -1,0 +1,90 @@
+# .gitignore para un proyecto Node.js
+
+# Dependencias de Node.js
+
+node\_modules/
+
+# Caché opcional de npm
+
+dist/
+.npm/
+
+# Archivos de registro
+
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log\*
+yarn-error.log\*
+
+# Datos en tiempo de ejecución
+
+pids/
+\*.pid
+\*.seed
+\*.pid.lock
+
+# Cobertura de tests
+
+dist/coverage/
+coverage/
+.nyc\_output/
+
+# Almacenamiento intermedio de Grunt
+
+.grunt/
+
+# Dependencias de Bower
+
+bower\_components/
+
+# Complementos binarios compilados
+
+build/Release/
+
+# Directorios de dependencias adicionales
+
+jspm\_packages/
+
+# Caché de TypeScript
+
+\*.tsbuildinfo
+typings/
+
+# Caché opcional de ESLint
+
+.eslintcache
+
+# Archivos de entorno
+
+dotenv/
+.env
+.env.\*.local
+
+# Configuración de editores
+
+.vscode/
+.idea/
+
+# Archivos del sistema operativo
+
+.DS\_Store
+
+# Archivos de bloqueo (npm/yarn)
+
+package-lock.json
+yarn.lock
+
+# Salida de compilación de Express (si aplica)
+
+build/
+
+# Archivos comprimidos
+
+temp/
+\*.tgz
+
+# Otros
+
+\*.swp
+\*.swo
