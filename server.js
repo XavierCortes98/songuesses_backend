@@ -5,6 +5,10 @@ import fetch from "node-fetch";
 const app = express();
 app.use(cors());
 
+const songReproductions = 800_000;
+
+let songToGuess = null;
+
 app.get("/api/deezer/random-popular", async (req, res) => {
   const { q } = req.query;
   if (!q) return res.status(400).json({ error: "Falta parámetro q" });
@@ -36,6 +40,14 @@ app.get("/api/deezer/search", async (req, res) => {
   }
 });
 
+app.get("/check-song/:id", (req, res) => {
+  const songId = req.params.id;
+  console.log("songId recibido", songId);
+  const exists = songId === songToGuess.id.toString();
+  console.log("songId guardado", songToGuess.id);
+  res.json(exists); // devolverá true o false
+});
+
 async function getTrackNames(query) {
   try {
     console.log("query autocomplete: ", query);
@@ -48,7 +60,6 @@ async function getTrackNames(query) {
     }
 
     const json = await response.json();
-    console.log("Deezer result:", json);
 
     return json.data; // esto es un array de canciones
   } catch (error) {
@@ -60,27 +71,26 @@ async function getTrackNames(query) {
 async function getRandomPopularTrack(query) {
   try {
     const response = await fetch(
-      `https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=1`
+      `https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=50`
     );
     const data = await response.json();
 
-    // Los tracks vienen en data.data, no en data.results
     const results = data.data;
-    //console.log("data", data);
-    //console.log("data", results.length);
+
     if (!Array.isArray(results) || results.length === 0) {
       throw new Error("No results found");
     }
 
-    // Filtramos los que tienen rank > 1M
-    const popular = results.filter((track) => track.rank > 800_000);
+    // Filtramos los que tienen rank > 800_000M
+    const popular = results.filter((track) => track.rank > songReproductions);
     if (popular.length === 0) {
       throw new Error("No popular tracks found");
     }
 
     // Elegimos una al azar
     const randomIndex = Math.floor(Math.random() * popular.length);
-    return popular[randomIndex];
+    songToGuess = popular[randomIndex];
+    return songToGuess;
   } catch (error) {
     console.error("Error fetching data from Deezer API:", error);
     throw error;
